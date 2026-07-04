@@ -5,11 +5,21 @@ argument-hint: "What will the next OpenCode session be used for?"
 disable-model-invocation: true
 ---
 
+## write handoff summary
+
 Write a handoff summary of the current conversation so a fresh OpenCode session can continue the work.
 
-Before launching, check for `.opencode-handoff` in the current working directory. If it exists, read it as the model roster. The roster is a Markdown table with columns `model`, `variant`, `cost`, `intelligence`, and `taste`. The column is singular `variant`, not `variants`.
+Include a "suggested skills" section in the summary, which suggests skills that the session should invoke.
 
-Generate or update `.opencode-handoff` by running `opencode-handoff-init` from within the repo root.
+Do not duplicate content already captured in other artifacts (PRDs, plans, ADRs, issues, commits, diffs). Reference them by path or URL instead.
+
+Redact any sensitive information, such as API keys, passwords, or personally identifiable information -- the summary becomes the session prompt.
+
+If the user passed arguments, treat them as a description of what the next session will focus on and tailor the summary accordingly.
+
+## launch opencode background task
+
+Before launching, check for `.opencode-handoff` in the current working directory. If it exists, read it as the model roster. The roster is a Markdown table with columns `model`, `variant`, `cost`, `intelligence`, and `taste`. The column is singular `variant`, not `variants`.
 
 If `.opencode-handoff` does not exist, use this built-in support table:
 
@@ -31,29 +41,27 @@ Apply the scores this way:
 
 Choose a supported `variant` for the selected model. Do not invent a `variant`; it is provider-specific. Use `medium` or `low` for smoke tests and simple follow-ups; use `high` for normal handoffs; use `max` only when the selected model supports it and the handoff clearly needs deeper reasoning. If no supported model is available, omit `--model` and `--variant`. If a model has no selected variant, omit `--variant`.
 
-Because OpenCode has no native background flag, save the summary to a temporary file outside the workspace and launch it as a background process:
-
 ```sh
-nohup opencode run \
+nohup sh -c '
+opencode run \
   --title "<descriptive title>" \
   --dir "<current working directory>" \
   --model "<provider/model>" \
   --variant "<provider-specific variant>" \
   "Continue from the attached handoff summary. Start working immediately." \
-  --file "<handoff file>" \
-  > "<log file>" 2>&1 &
+  --file "<handoff file>"
+code=$?
+echo "finished at $(date), exit code=$code" > "<done file>"
+exit $code
+' > "<log file>" 2>&1 &
+
+echo $! > "<pid file>"
 ```
 
-Remove the `--model` or `--variant` lines when they are not selected.
+Omit `--model` and `--variant` when they are not selected.
 
-Always pass `--title` with a descriptive title. It sets the session title shown by `opencode session list`.
+Always pass `--title` with a descriptive title.
 
-Include a "suggested skills" section in the summary, which suggests skills that the session should invoke.
+After launching, report the title, process ID, selected model and variant if any, temporary handoff file, done file, and log file. Do not wait for the session to finish.
 
-Do not duplicate content already captured in other artifacts (PRDs, plans, ADRs, issues, commits, diffs). Reference them by path or URL instead.
-
-Redact any sensitive information, such as API keys, passwords, or personally identifiable information -- the summary becomes the session prompt.
-
-If the user passed arguments, treat them as a description of what the next session will focus on and tailor the summary accordingly.
-
-After launching, report the title, process id, selected model and variant if any, temporary handoff file, and log file. The user can inspect sessions with `opencode session list`; do not wait for the session to finish.
+Run `cat "<done file>"` to check whether the task completed or failed with an error.
