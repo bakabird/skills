@@ -39,7 +39,13 @@ Apply the scores this way:
 - Anything user-facing, including UI, copy, API design, and public docs, needs `taste >= 7` when such a model is available.
 - Reviews of plans or implementations primarily need intelligence.
 
-Choose a supported `variant` for the selected model. Do not invent a `variant`; it is provider-specific. Use `medium` or `low` for smoke tests and simple follow-ups; use `high` for normal handoffs; use `max` only when the selected model supports it and the handoff clearly needs deeper reasoning. If no supported model is available, omit `--model` and `--variant`. If a model has no selected variant, omit `--variant`.
+Choose a supported `variant` for the selected model. Do not invent a `variant`; variants are provider-specific.
+
+Use `medium` or `low` for smoke tests and simple follow-ups, `high` for normal handoffs, and `max` only when the selected model supports it and the handoff clearly requires deeper reasoning.
+
+If no supported models are available, omit `--model` and `--variant`. If no variant is selected for the model, omit `--variant`.
+
+Run the `nohup` launch outside the sandbox when sandboxing blocks background execution.
 
 ```sh
 nohup sh -c '
