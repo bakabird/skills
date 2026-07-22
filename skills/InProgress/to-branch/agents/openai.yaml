@@ -1,0 +1,5 @@
+interface:
+  display_name: "To Branch"
+  short_description: "Move the current branch's extra commits and local changes onto a target branch."
+policy:
+  allow_implicit_invocation: false

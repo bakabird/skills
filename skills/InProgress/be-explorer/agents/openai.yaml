@@ -1,0 +1,5 @@
+interface:
+  display_name: "Be Explorer"
+  short_description: "Enter explore mode - think through ideas, investigate problems, clarify requirements"
+policy:
+  allow_implicit_invocation: false
