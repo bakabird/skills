@@ -1,0 +1,5 @@
+interface:
+  display_name: "Outsource Mode (Codex)"
+  short_description: "进入外包 + Codex 咨询的分工模式：执行交给 /handoff-outsource，难点交给 /consult-codex。"
+policy:
+  allow_implicit_invocation: false

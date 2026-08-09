@@ -1,0 +1,5 @@
+interface:
+  display_name: "Outsource Mode"
+  short_description: "进入纯外包分工模式：自己只做调度、决策、审阅、计划，执行交给 /handoff-outsource。"
+policy:
+  allow_implicit_invocation: false
