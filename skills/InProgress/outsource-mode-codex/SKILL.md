@@ -23,7 +23,7 @@ argument-hint: "[--outsource \"aid opus xhigh\"] [--consult-effort high]"
     - 使用 aid opus xhigh
     - 启动后请不设超时时间地等待相关 shell/Terminal 命令执行完毕
     - 外包工作期间，请等待别瞎折腾。外包结束工作后会向你汇报。
-- /consult-codex：针对重点问题、难点问题进行咨询。
+- /consult-codex：针对你拿不准的问题进行咨询。
     - 场景：涉及项目核心代码的改动；复杂计划执行前把关；一项复杂的任务整体执行完毕后。
     - 使用 gpt-5.6-sol high
     - 启动后请不设超时时间地等待相关 shell/Terminal 命令执行完毕
